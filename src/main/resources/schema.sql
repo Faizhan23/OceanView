@@ -27,3 +27,12 @@ CREATE TABLE users (
     UNIQUE KEY uq_email    (email),
     CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(role_id)
 );
+
+CREATE TABLE room_categories (
+    category_id   TINYINT       NOT NULL AUTO_INCREMENT,
+    category_name VARCHAR(50)   NOT NULL,    -- 'Standard','Deluxe','Suite','Ocean View'
+    price_per_night DECIMAL(10,2) NOT NULL,
+    description   VARCHAR(255),
+    PRIMARY KEY (category_id),
+    UNIQUE KEY uq_category_name (category_name)
+);
