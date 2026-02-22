@@ -13,3 +13,17 @@ CREATE TABLE roles (
     UNIQUE KEY uq_role_name (role_name)
 );
 
+CREATE TABLE users (
+    user_id       INT          NOT NULL AUTO_INCREMENT,
+    username      VARCHAR(50)  NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,   -- BCrypt hash
+    full_name     VARCHAR(100) NOT NULL,
+    email         VARCHAR(150) NOT NULL,
+    role_id       TINYINT      NOT NULL DEFAULT 1,
+    is_active     TINYINT(1)   NOT NULL DEFAULT 1,
+    created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id),
+    UNIQUE KEY uq_username (username),
+    UNIQUE KEY uq_email    (email),
+    CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(role_id)
+);
