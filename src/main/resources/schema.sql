@@ -241,3 +241,50 @@ BEGIN
 END $$
 
 
+CREATE TRIGGER trg_prevent_double_booking_update
+BEFORE UPDATE ON reservations
+FOR EACH ROW
+BEGIN
+    DECLARE v_conflict_count INT DEFAULT 0;
+
+    IF NEW.checkin_date != OLD.checkin_date OR NEW.checkout_date != OLD.checkout_date OR NEW.room_id != OLD.room_id THEN
+        SELECT COUNT(*) INTO v_conflict_count
+        FROM   reservations
+        WHERE  room_id         = NEW.room_id
+          AND  reservation_id != NEW.reservation_id
+          AND  status          NOT IN ('CANCELLED')
+          AND  checkin_date    < NEW.checkout_date
+          AND  checkout_date   > NEW.checkin_date;
+
+        IF v_conflict_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'DOUBLE_BOOKING: Room is already reserved for the selected dates.';
+        END IF;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+INSERT INTO roles (role_name) VALUES ('STAFF'), ('ADMIN');
+
+INSERT INTO users (username, password_hash, full_name, email, role_id)
+VALUES ('admin', 'Admin@1234',
+        'System Administrator', 'admin@oceanviewresort.com', 2);
+
+INSERT INTO room_categories (category_name, price_per_night, description) VALUES
+('Standard',    120.00, 'Comfortable standard room with garden view'),
+('Deluxe',      180.00, 'Spacious deluxe room with partial sea view'),
+('Suite',       280.00, 'Luxury suite with full ocean view and living area'),
+('Ocean View',  350.00, 'Premium ocean-front room with panoramic views');
+
+INSERT INTO rooms (room_number, category_id, floor_number, capacity) VALUES
+('101', 1, 1, 2), ('102', 1, 1, 2), ('103', 1, 1, 2),
+('201', 2, 2, 2), ('202', 2, 2, 3), ('203', 2, 2, 2),
+('301', 3, 3, 4), ('302', 3, 3, 4),
+('401', 4, 4, 2), ('402', 4, 4, 2);
+
+
+
+
+
