@@ -16,7 +16,7 @@ CREATE TABLE roles (
 CREATE TABLE users (
     user_id       INT          NOT NULL AUTO_INCREMENT,
     username      VARCHAR(50)  NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,   -- BCrypt hash
+    password_hash VARCHAR(255) NOT NULL,   
     full_name     VARCHAR(100) NOT NULL,
     email         VARCHAR(150) NOT NULL,
     role_id       TINYINT      NOT NULL DEFAULT 1,
@@ -30,9 +30,29 @@ CREATE TABLE users (
 
 CREATE TABLE room_categories (
     category_id   TINYINT       NOT NULL AUTO_INCREMENT,
-    category_name VARCHAR(50)   NOT NULL,    -- 'Standard','Deluxe','Suite','Ocean View'
+    category_name VARCHAR(50)   NOT NULL,    
     price_per_night DECIMAL(10,2) NOT NULL,
     description   VARCHAR(255),
     PRIMARY KEY (category_id),
     UNIQUE KEY uq_category_name (category_name)
 );
+
+
+CREATE TABLE rooms (
+    room_id     SMALLINT     NOT NULL AUTO_INCREMENT,
+    room_number VARCHAR(10)  NOT NULL,
+    category_id TINYINT      NOT NULL,
+    floor_number TINYINT     NOT NULL,
+    capacity    TINYINT      NOT NULL DEFAULT 2,
+    is_active   TINYINT(1)   NOT NULL DEFAULT 1,
+    PRIMARY KEY (room_id),
+    UNIQUE KEY uq_room_number (room_number),
+    CONSTRAINT fk_rooms_category FOREIGN KEY (category_id) REFERENCES room_categories(category_id),
+    INDEX idx_rooms_category (category_id)
+);
+
+
+
+
+
+
