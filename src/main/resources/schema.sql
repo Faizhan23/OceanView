@@ -188,6 +188,36 @@ BEGIN
 END $$
 
 
+CREATE PROCEDURE sp_room_occupancy(
+    IN p_start_date DATE,
+    IN p_end_date   DATE
+)
+BEGIN
+    DECLARE v_total_days INT;
+    SET v_total_days = DATEDIFF(p_end_date, p_start_date) + 1;
+
+    SELECT
+        rm.room_number,
+        rc.category_name,
+        COUNT(r.reservation_id)                           AS times_booked,
+        COALESCE(SUM(r.num_nights), 0)                    AS nights_occupied,
+        v_total_days                                      AS total_days,
+        ROUND(
+            (COALESCE(SUM(r.num_nights), 0) / v_total_days) * 100, 2
+        )                                                 AS occupancy_pct
+    FROM   rooms rm
+    JOIN   room_categories rc ON rc.category_id = rm.category_id
+    LEFT   JOIN reservations r ON  r.room_id = rm.room_id
+                                AND r.status NOT IN ('CANCELLED')
+                                AND r.checkin_date  >= p_start_date
+                                AND r.checkout_date <= p_end_date
+    WHERE  rm.is_active = 1
+    GROUP  BY rm.room_id, rm.room_number, rc.category_name
+    ORDER  BY occupancy_pct DESC;
+END $$
+
+DELIMITER ;
+
 
 
 
