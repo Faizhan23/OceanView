@@ -51,7 +51,16 @@ CREATE TABLE rooms (
     INDEX idx_rooms_category (category_id)
 );
 
-
+CREATE TABLE guests (
+    guest_id       INT          NOT NULL AUTO_INCREMENT,
+    guest_name     VARCHAR(100) NOT NULL,
+    address        VARCHAR(255) NOT NULL,
+    contact_number VARCHAR(20)  NOT NULL,
+    email          VARCHAR(150),
+    created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (guest_id),
+    INDEX idx_guests_name (guest_name)
+);
 
 
 
