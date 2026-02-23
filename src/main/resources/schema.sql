@@ -62,6 +62,31 @@ CREATE TABLE guests (
     INDEX idx_guests_name (guest_name)
 );
 
+CREATE TABLE reservations (
+    reservation_id   INT          NOT NULL AUTO_INCREMENT,
+    reservation_ref  VARCHAR(20)  NOT NULL,    
+    guest_id         INT          NOT NULL,
+    room_id          SMALLINT     NOT NULL,
+    user_id          INT          NOT NULL,     
+    checkin_date     DATE         NOT NULL,
+    checkout_date    DATE         NOT NULL,
+    num_nights       SMALLINT     NOT NULL,
+    status           ENUM('PENDING','CONFIRMED','CHECKED_IN','CHECKED_OUT','CANCELLED')
+                                  NOT NULL DEFAULT 'CONFIRMED',
+    special_requests TEXT,
+    created_at       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (reservation_id),
+    UNIQUE KEY uq_reservation_ref (reservation_ref),
+    CONSTRAINT fk_res_guest  FOREIGN KEY (guest_id)  REFERENCES guests(guest_id),
+    CONSTRAINT fk_res_room   FOREIGN KEY (room_id)   REFERENCES rooms(room_id),
+    CONSTRAINT fk_res_user   FOREIGN KEY (user_id)   REFERENCES users(user_id),
+    INDEX idx_res_checkin  (checkin_date),
+    INDEX idx_res_checkout (checkout_date),
+    INDEX idx_res_room     (room_id),
+    INDEX idx_res_status   (status),
+    CONSTRAINT chk_dates CHECK (checkout_date > checkin_date)
+);
 
 
 
