@@ -89,4 +89,21 @@ CREATE TABLE reservations (
 );
 
 
+CREATE TABLE bills (
+    bill_id        INT            NOT NULL AUTO_INCREMENT,
+    reservation_id INT            NOT NULL,
+    room_charge    DECIMAL(10,2)  NOT NULL,
+    tax_amount     DECIMAL(10,2)  NOT NULL,
+    discount       DECIMAL(10,2)  NOT NULL DEFAULT 0.00,
+    total_amount   DECIMAL(10,2)  NOT NULL,
+    tax_rate       DECIMAL(5,2)   NOT NULL DEFAULT 10.00,
+    is_paid        TINYINT(1)     NOT NULL DEFAULT 0,
+    generated_at   DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    paid_at        DATETIME,
+    PRIMARY KEY (bill_id),
+    UNIQUE KEY uq_bill_reservation (reservation_id),
+    CONSTRAINT fk_bill_reservation FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id)
+);
+
+
 
