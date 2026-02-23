@@ -106,4 +106,21 @@ CREATE TABLE bills (
 );
 
 
+CREATE TABLE audit_log (
+    log_id     BIGINT       NOT NULL AUTO_INCREMENT,
+    user_id    INT,
+    action     VARCHAR(100) NOT NULL,
+    table_name VARCHAR(50)  NOT NULL,
+    record_id  INT,
+    log_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(45),
+    PRIMARY KEY (log_id),
+    INDEX idx_audit_time (log_time),
+    INDEX idx_audit_user (user_id)
+);
+
+
+
+
+
 
