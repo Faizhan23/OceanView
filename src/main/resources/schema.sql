@@ -219,6 +219,25 @@ END $$
 DELIMITER ;
 
 
+DELIMITER $$
 
+CREATE TRIGGER trg_prevent_double_booking
+BEFORE INSERT ON reservations
+FOR EACH ROW
+BEGIN
+    DECLARE v_conflict_count INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO v_conflict_count
+    FROM   reservations
+    WHERE  room_id       = NEW.room_id
+      AND  status        NOT IN ('CANCELLED')
+      AND  checkin_date  < NEW.checkout_date
+      AND  checkout_date > NEW.checkin_date;
+
+    IF v_conflict_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'DOUBLE_BOOKING: Room is already reserved for the selected dates.';
+    END IF;
+END $$
 
 
