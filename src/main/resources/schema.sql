@@ -120,6 +120,56 @@ CREATE TABLE audit_log (
 );
 
 
+DELIMITER $$
+
+CREATE PROCEDURE sp_calculate_bill(
+    IN  p_reservation_id INT,
+    IN  p_tax_rate       DECIMAL(5,2),
+    IN  p_discount       DECIMAL(10,2),
+    OUT p_room_charge    DECIMAL(10,2),
+    OUT p_tax_amount     DECIMAL(10,2),
+    OUT p_total          DECIMAL(10,2)
+)
+BEGIN
+    DECLARE v_num_nights    SMALLINT;
+    DECLARE v_price_night   DECIMAL(10,2);
+    DECLARE v_existing_bill INT DEFAULT 0;
+
+    -- Fetch nights and nightly rate
+    SELECT r.num_nights, rc.price_per_night
+    INTO   v_num_nights, v_price_night
+    FROM   reservations r
+    JOIN   rooms        rm ON rm.room_id   = r.room_id
+    JOIN   room_categories rc ON rc.category_id = rm.category_id
+    WHERE  r.reservation_id = p_reservation_id;
+
+    -- Calculate charges
+    SET p_room_charge = v_num_nights * v_price_night;
+    SET p_tax_amount  = (p_room_charge - p_discount) * (p_tax_rate / 100);
+    SET p_total       = p_room_charge - p_discount + p_tax_amount;
+
+    -- Upsert into bills
+    SELECT COUNT(*) INTO v_existing_bill
+    FROM   bills WHERE reservation_id = p_reservation_id;
+
+    IF v_existing_bill = 0 THEN
+        INSERT INTO bills (reservation_id, room_charge, tax_amount, discount, total_amount, tax_rate)
+        VALUES (p_reservation_id, p_room_charge, p_tax_amount, p_discount, p_total, p_tax_rate);
+    ELSE
+        UPDATE bills
+        SET    room_charge = p_room_charge,
+               tax_amount  = p_tax_amount,
+               discount    = p_discount,
+               total_amount = p_total,
+               tax_rate    = p_tax_rate
+        WHERE  reservation_id = p_reservation_id;
+    END IF;
+END $$
+
+
+
+
+
 
 
 
