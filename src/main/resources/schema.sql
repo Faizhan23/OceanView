@@ -167,7 +167,25 @@ BEGIN
 END $$
 
 
-
+CREATE PROCEDURE sp_monthly_revenue(
+    IN p_year  INT,
+    IN p_month INT
+)
+BEGIN
+    SELECT
+        DATE_FORMAT(r.checkin_date, '%Y-%m')            AS period,
+        COUNT(r.reservation_id)                          AS total_reservations,
+        SUM(b.room_charge)                               AS total_room_charge,
+        SUM(b.tax_amount)                                AS total_tax,
+        SUM(b.discount)                                  AS total_discount,
+        SUM(b.total_amount)                              AS total_revenue
+    FROM   reservations r
+    JOIN   bills b ON b.reservation_id = r.reservation_id
+    WHERE  YEAR(r.checkin_date)  = p_year
+      AND  MONTH(r.checkin_date) = p_month
+      AND  r.status NOT IN ('CANCELLED')
+    GROUP  BY DATE_FORMAT(r.checkin_date, '%Y-%m');
+END $$
 
 
 
