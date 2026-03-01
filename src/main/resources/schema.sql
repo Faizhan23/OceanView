@@ -278,7 +278,7 @@ INSERT INTO roles (role_name) VALUES ('STAFF'), ('ADMIN');
 
 INSERT INTO users (username, password_hash, full_name, email, role_id)
 VALUES ('admin', 'Admin@1234',
-        'System Administrator', 'admin@oceanviewresort.com', 2);
+        'System Administrator', '$2a$12$VLFfzXUV1Fq3lXpk5yKVMuM.rSqjFWEy5RB4V4uBjA8Kj1GBLhHsO', 2);
 
 INSERT INTO room_categories (category_name, price_per_night, description) VALUES
 ('Standard',    120.00, 'Comfortable standard room with garden view'),
