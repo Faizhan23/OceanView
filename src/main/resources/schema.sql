@@ -20,7 +20,7 @@ CREATE TABLE users (
     full_name     VARCHAR(100) NOT NULL,
     email         VARCHAR(150) NOT NULL,
     role_id       TINYINT      NOT NULL DEFAULT 1,
-    is_active     TINYINT(1)   NOT NULL DEFAULT 1,
+    is_active     TINYINT   NOT NULL DEFAULT 1,
     created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id),
     UNIQUE KEY uq_username (username),
@@ -44,7 +44,7 @@ CREATE TABLE rooms (
     category_id TINYINT      NOT NULL,
     floor_number TINYINT     NOT NULL,
     capacity    TINYINT      NOT NULL DEFAULT 2,
-    is_active   TINYINT(1)   NOT NULL DEFAULT 1,
+    is_active   TINYINT   NOT NULL DEFAULT 1,
     PRIMARY KEY (room_id),
     UNIQUE KEY uq_room_number (room_number),
     CONSTRAINT fk_rooms_category FOREIGN KEY (category_id) REFERENCES room_categories(category_id),
@@ -97,7 +97,7 @@ CREATE TABLE bills (
     discount       DECIMAL(10,2)  NOT NULL DEFAULT 0.00,
     total_amount   DECIMAL(10,2)  NOT NULL,
     tax_rate       DECIMAL(5,2)   NOT NULL DEFAULT 10.00,
-    is_paid        TINYINT(1)     NOT NULL DEFAULT 0,
+    is_paid        TINYINT     NOT NULL DEFAULT 0,
     generated_at   DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     paid_at        DATETIME,
     PRIMARY KEY (bill_id),
@@ -167,6 +167,9 @@ BEGIN
 END $$
 
 
+
+DELIMITER $$
+
 CREATE PROCEDURE sp_monthly_revenue(
     IN p_year  INT,
     IN p_month INT
@@ -187,6 +190,9 @@ BEGIN
     GROUP  BY DATE_FORMAT(r.checkin_date, '%Y-%m');
 END $$
 
+
+
+DELIMITER $$
 
 CREATE PROCEDURE sp_room_occupancy(
     IN p_start_date DATE,
@@ -240,6 +246,8 @@ BEGIN
     END IF;
 END $$
 
+
+DELIMITER $$
 
 CREATE TRIGGER trg_prevent_double_booking_update
 BEFORE UPDATE ON reservations
