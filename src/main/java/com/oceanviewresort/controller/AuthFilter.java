@@ -5,12 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-/**
- * Servlet Filter: enforces session-based authentication.
- * Intercepts every request to protected URLs and redirects unauthenticated users to login.
- *
- * Design Pattern: Chain of Responsibility (Filter chain)
- */
+
 @WebFilter(urlPatterns = {"/dashboard/*", "/reservation/*", "/billing/*", "/reports/*", "/help/*"})
 public class AuthFilter implements Filter {
 
