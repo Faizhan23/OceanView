@@ -13,17 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * MVC Controller for Reservation operations.
- * Routes:
- *   GET  /reservation            → list all reservations
- *   GET  /reservation?action=new → new reservation form
- *   POST /reservation            → create reservation
- *   GET  /reservation?action=view&id=X  → view details
- *   POST /reservation?action=cancel&id=X → cancel
- *
- * No SQL, no business logic – delegates to ReservationService.
- */
+
 @WebServlet(name = "ReservationServlet", urlPatterns = "/reservation/*")
 public class ReservationServlet extends HttpServlet {
 

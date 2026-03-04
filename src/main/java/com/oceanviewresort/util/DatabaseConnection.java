@@ -6,35 +6,27 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Singleton pattern implementation for database connection management.
- * Provides thread-safe, centralised access to a single database connection.
- *
- * Design Pattern: Singleton (thread-safe via synchronized getInstance)
- */
+
 public final class DatabaseConnection {
 
     private static final Logger LOGGER = Logger.getLogger(DatabaseConnection.class.getName());
 
-    // ── Connection parameters (override via environment variables in production) ──
+   
     private static final String DB_URL      = System.getProperty("db.url",      "jdbc:mysql://localhost:3306/ocean_view_resort?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
     private static final String DB_USER     = System.getProperty("db.user",     "root");
     private static final String DB_PASSWORD = System.getProperty("db.password", "root");
     private static final String DB_DRIVER   = "com.mysql.cj.jdbc.Driver";
 
-    // Volatile ensures visibility across threads
+  
     private static volatile DatabaseConnection instance;
     private Connection connection;
 
-    /** Private constructor – enforces Singleton */
+
     private DatabaseConnection() {
         connect();
     }
 
-    /**
-     * Returns the single instance of DatabaseConnection.
-     * Double-checked locking for thread safety.
-     */
+
     public static DatabaseConnection getInstance() {
         if (instance == null) {
             synchronized (DatabaseConnection.class) {
@@ -46,10 +38,7 @@ public final class DatabaseConnection {
         return instance;
     }
 
-    /**
-     * Returns a valid, open JDBC Connection.
-     * Automatically reconnects if the connection has been lost.
-     */
+    
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
@@ -62,7 +51,7 @@ public final class DatabaseConnection {
         return connection;
     }
 
-    /** Establishes the JDBC connection. */
+  
     private void connect() {
         try {
             Class.forName(DB_DRIVER);
@@ -77,7 +66,7 @@ public final class DatabaseConnection {
         }
     }
 
-    /** Closes the connection – call only on application shutdown. */
+   
     public void closeConnection() {
         if (connection != null) {
             try {
@@ -89,7 +78,7 @@ public final class DatabaseConnection {
         }
     }
 
-    // Prevent cloning – Singleton must not be cloned
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Singleton cannot be cloned.");
