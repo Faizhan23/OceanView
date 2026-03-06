@@ -1,90 +1,78 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.controller;
 
 import com.oceanviewresort.model.User;
 import com.oceanviewresort.service.AuthService;
 import com.oceanviewresort.util.ValidationUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-/**
- * Servlet Controller for Login and Logout.
- * MVC – Controller: handles HTTP, delegates to AuthService, forwards to JSP view.
- * No business logic here. No SQL here.
- */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login", "/logout"})
+@WebServlet(
+   name = "LoginServlet",
+   urlPatterns = {"/login", "/logout"}
+)
 public class LoginServlet extends HttpServlet {
+   private static final String SESSION_USER = "loggedInUser";
+   private AuthService authService;
 
-    private static final String SESSION_USER = "loggedInUser";
-    private AuthService authService;
+   public LoginServlet() {
+   }
 
-    @Override
-    public void init() {
-        this.authService = new AuthService();
-    }
+   public void init() {
+      this.authService = new AuthService();
+   }
 
-    /** Display login page */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
-        String path = req.getServletPath();
-
-        if ("/logout".equals(path)) {
-            handleLogout(req, resp);
-            return;
-        }
-
-        // If already logged in – redirect to dashboard
-        HttpSession session = req.getSession(false);
-        if (session != null && session.getAttribute(SESSION_USER) != null) {
+   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+      String path = req.getServletPath();
+      if ("/logout".equals(path)) {
+         this.handleLogout(req, resp);
+      } else {
+         HttpSession session = req.getSession(false);
+         if (session != null && session.getAttribute("loggedInUser") != null) {
             resp.sendRedirect(req.getContextPath() + "/dashboard");
-            return;
-        }
+         } else {
+            req.getRequestDispatcher("/views/auth/login.jsp").forward(req, resp);
+         }
+      }
+   }
 
-        req.getRequestDispatcher("/views/auth/login.jsp").forward(req, resp);
-    }
+   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+      String username = ValidationUtil.sanitise(req.getParameter("username"));
+      String password = req.getParameter("password");
 
-    /** Process login form submission */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
-        String username = ValidationUtil.sanitise(req.getParameter("username"));
-        String password = req.getParameter("password"); // not sanitised – raw for BCrypt
-
-        try {
-            Optional<User> userOpt = authService.authenticate(username, password);
-
-            if (userOpt.isPresent()) {
-                // Prevent session fixation
-                req.getSession(false);
-                HttpSession session = req.getSession(true);
-                session.setAttribute(SESSION_USER, userOpt.get());
-                session.setMaxInactiveInterval(30 * 60); // 30 minutes
-                resp.sendRedirect(req.getContextPath() + "/dashboard");
-            } else {
-                req.setAttribute("errorMessage", "Invalid username or password.");
-                req.setAttribute("username", username);
-                req.getRequestDispatcher("/views/auth/login.jsp").forward(req, resp);
-            }
-
-        } catch (IllegalArgumentException e) {
-            req.setAttribute("errorMessage", e.getMessage());
+      try {
+         Optional<User> userOpt = this.authService.authenticate(username, password);
+         if (userOpt.isPresent()) {
+            req.getSession(false);
+            HttpSession session = req.getSession(true);
+            session.setAttribute("loggedInUser", userOpt.get());
+            session.setMaxInactiveInterval(1800);
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
+         } else {
+            req.setAttribute("errorMessage", "Invalid username or password.");
             req.setAttribute("username", username);
             req.getRequestDispatcher("/views/auth/login.jsp").forward(req, resp);
-        }
-    }
+         }
+      } catch (IllegalArgumentException e) {
+         req.setAttribute("errorMessage", e.getMessage());
+         req.setAttribute("username", username);
+         req.getRequestDispatcher("/views/auth/login.jsp").forward(req, resp);
+      }
 
-    private void handleLogout(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        HttpSession session = req.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        resp.sendRedirect(req.getContextPath() + "/login?msg=logged_out");
-    }
+   }
+
+   private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+      HttpSession session = req.getSession(false);
+      if (session != null) {
+         session.invalidate();
+      }
+
+      resp.sendRedirect(req.getContextPath() + "/login?msg=logged_out");
+   }
 }

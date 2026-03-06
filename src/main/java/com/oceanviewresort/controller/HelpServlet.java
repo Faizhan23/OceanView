@@ -1,19 +1,22 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.controller;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Simple controller for the Help section.
- */
-@WebServlet(name = "HelpServlet", urlPatterns = "/help/*")
+@WebServlet(
+   name = "HelpServlet",
+   urlPatterns = {"/help/*"}
+)
 public class HelpServlet extends HttpServlet {
+   public HelpServlet() {
+   }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        req.getRequestDispatcher("/views/help/help.jsp").forward(req, resp);
-    }
+   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+      req.getRequestDispatcher("/views/help/help.jsp").forward(req, resp);
+   }
 }

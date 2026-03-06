@@ -1,3 +1,4 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.util;
 
 import java.sql.Connection;
@@ -6,81 +7,71 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public final class DatabaseConnection {
+   private static final Logger LOGGER = Logger.getLogger(DatabaseConnection.class.getName());
+   private static final String DB_URL = System.getProperty("db.url", "jdbc:mysql://localhost:3306/ocean_view_resort?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+   private static final String DB_USER = System.getProperty("db.user", "root");
+   private static final String DB_PASSWORD = System.getProperty("db.password", "root");
+   private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+   private static volatile DatabaseConnection instance;
+   private Connection connection;
 
-    private static final Logger LOGGER = Logger.getLogger(DatabaseConnection.class.getName());
+   private DatabaseConnection() {
+      this.connect();
+   }
 
-   
-    private static final String DB_URL      = System.getProperty("db.url",      "jdbc:mysql://localhost:3306/ocean_view_resort?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
-    private static final String DB_USER     = System.getProperty("db.user",     "root");
-    private static final String DB_PASSWORD = System.getProperty("db.password", "root");
-    private static final String DB_DRIVER   = "com.mysql.cj.jdbc.Driver";
-
-  
-    private static volatile DatabaseConnection instance;
-    private Connection connection;
-
-
-    private DatabaseConnection() {
-        connect();
-    }
-
-
-    public static DatabaseConnection getInstance() {
-        if (instance == null) {
-            synchronized (DatabaseConnection.class) {
-                if (instance == null) {
-                    instance = new DatabaseConnection();
-                }
+   public static DatabaseConnection getInstance() {
+      if (instance == null) {
+         synchronized(DatabaseConnection.class) {
+            if (instance == null) {
+               instance = new DatabaseConnection();
             }
-        }
-        return instance;
-    }
+         }
+      }
 
-    
-    public Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connect();
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Failed to verify connection state", e);
-            connect();
-        }
-        return connection;
-    }
+      return instance;
+   }
 
-  
-    private void connect() {
-        try {
-            Class.forName(DB_DRIVER);
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            LOGGER.info("Database connection established successfully.");
-        } catch (ClassNotFoundException e) {
-            LOGGER.log(Level.SEVERE, "MySQL JDBC driver not found.", e);
-            throw new RuntimeException("Database driver missing: " + DB_DRIVER, e);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Cannot connect to database.", e);
-            throw new RuntimeException("Database connection failed.", e);
-        }
-    }
+   public Connection getConnection() {
+      try {
+         if (this.connection == null || this.connection.isClosed()) {
+            this.connect();
+         }
+      } catch (SQLException e) {
+         LOGGER.log(Level.SEVERE, "Failed to verify connection state", e);
+         this.connect();
+      }
 
-   
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                LOGGER.info("Database connection closed.");
-            } catch (SQLException e) {
-                LOGGER.log(Level.WARNING, "Error closing connection.", e);
-            }
-        }
-    }
+      return this.connection;
+   }
 
+   private void connect() {
+      try {
+         Class.forName("com.mysql.cj.jdbc.Driver");
+         this.connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+         LOGGER.info("Database connection established successfully.");
+      } catch (ClassNotFoundException e) {
+         LOGGER.log(Level.SEVERE, "MySQL JDBC driver not found.", e);
+         throw new RuntimeException("Database driver missing: com.mysql.cj.jdbc.Driver", e);
+      } catch (SQLException e) {
+         LOGGER.log(Level.SEVERE, "Cannot connect to database.", e);
+         throw new RuntimeException("Database connection failed.", e);
+      }
+   }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Singleton cannot be cloned.");
-    }
+   public void closeConnection() {
+      if (this.connection != null) {
+         try {
+            this.connection.close();
+            LOGGER.info("Database connection closed.");
+         } catch (SQLException e) {
+            LOGGER.log(Level.WARNING, "Error closing connection.", e);
+         }
+      }
+
+   }
+
+   protected Object clone() throws CloneNotSupportedException {
+      throw new CloneNotSupportedException("Singleton cannot be cloned.");
+   }
 }

@@ -1,67 +1,109 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Domain model representing a system user (staff or admin).
- */
 public class User {
+   private int userId;
+   private String username;
+   private String passwordHash;
+   private String fullName;
+   private String email;
+   private int roleId;
+   private String roleName;
+   private boolean active;
+   private LocalDateTime createdAt;
 
-    private int           userId;
-    private String        username;
-    private String        passwordHash;
-    private String        fullName;
-    private String        email;
-    private int           roleId;
-    private String        roleName;
-    private boolean       active;
-    private LocalDateTime createdAt;
+   public User() {
+   }
 
-    public User() { }
+   public User(int userId, String username, String fullName, String email, int roleId, String roleName, boolean active) {
+      this.userId = userId;
+      this.username = username;
+      this.fullName = fullName;
+      this.email = email;
+      this.roleId = roleId;
+      this.roleName = roleName;
+      this.active = active;
+   }
 
-    public User(int userId, String username, String fullName, String email,
-                int roleId, String roleName, boolean active) {
-        this.userId   = userId;
-        this.username = username;
-        this.fullName = fullName;
-        this.email    = email;
-        this.roleId   = roleId;
-        this.roleName = roleName;
-        this.active   = active;
-    }
+   public int getUserId() {
+      return this.userId;
+   }
 
-    // ── Getters & Setters ──────────────────────────────────────
-    public int           getUserId()       { return userId; }
-    public void          setUserId(int v)  { this.userId = v; }
+   public void setUserId(int v) {
+      this.userId = v;
+   }
 
-    public String        getUsername()          { return username; }
-    public void          setUsername(String v)  { this.username = v; }
+   public String getUsername() {
+      return this.username;
+   }
 
-    public String        getPasswordHash()         { return passwordHash; }
-    public void          setPasswordHash(String v) { this.passwordHash = v; }
+   public void setUsername(String v) {
+      this.username = v;
+   }
 
-    public String        getFullName()          { return fullName; }
-    public void          setFullName(String v)  { this.fullName = v; }
+   public String getPasswordHash() {
+      return this.passwordHash;
+   }
 
-    public String        getEmail()          { return email; }
-    public void          setEmail(String v)  { this.email = v; }
+   public void setPasswordHash(String v) {
+      this.passwordHash = v;
+   }
 
-    public int           getRoleId()       { return roleId; }
-    public void          setRoleId(int v)  { this.roleId = v; }
+   public String getFullName() {
+      return this.fullName;
+   }
 
-    public String        getRoleName()          { return roleName; }
-    public void          setRoleName(String v)  { this.roleName = v; }
+   public void setFullName(String v) {
+      this.fullName = v;
+   }
 
-    public boolean       isActive()         { return active; }
-    public void          setActive(boolean v) { this.active = v; }
+   public String getEmail() {
+      return this.email;
+   }
 
-    public LocalDateTime getCreatedAt()         { return createdAt; }
-    public void          setCreatedAt(LocalDateTime v) { this.createdAt = v; }
+   public void setEmail(String v) {
+      this.email = v;
+   }
 
-    public boolean isAdmin() { return "ADMIN".equalsIgnoreCase(roleName); }
+   public int getRoleId() {
+      return this.roleId;
+   }
 
-    @Override
-    public String toString() {
-        return "User{userId=" + userId + ", username='" + username + "', role='" + roleName + "'}";
-    }
+   public void setRoleId(int v) {
+      this.roleId = v;
+   }
+
+   public String getRoleName() {
+      return this.roleName;
+   }
+
+   public void setRoleName(String v) {
+      this.roleName = v;
+   }
+
+   public boolean isActive() {
+      return this.active;
+   }
+
+   public void setActive(boolean v) {
+      this.active = v;
+   }
+
+   public LocalDateTime getCreatedAt() {
+      return this.createdAt;
+   }
+
+   public void setCreatedAt(LocalDateTime v) {
+      this.createdAt = v;
+   }
+
+   public boolean isAdmin() {
+      return "ADMIN".equalsIgnoreCase(this.roleName);
+   }
+
+   public String toString() {
+      return "User{userId=" + this.userId + ", username='" + this.username + "', role='" + this.roleName + "'}";
+   }
 }

@@ -1,66 +1,117 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.model;
 
 import java.time.LocalDateTime;
 
-
-
 public class Bill {
+   private int billId;
+   private int reservationId;
+   private Reservation reservation;
+   private double roomCharge;
+   private double taxAmount;
+   private double discount;
+   private double totalAmount;
+   private double taxRate = (double)10.0F;
+   private boolean paid;
+   private LocalDateTime generatedAt;
+   private LocalDateTime paidAt;
 
-    private int           billId;
-    private int           reservationId;
-    private Reservation   reservation;    
-    private double        roomCharge;
-    private double        taxAmount;
-    private double        discount;
-    private double        totalAmount;
-    private double        taxRate;
-    private boolean       paid;
-    private LocalDateTime generatedAt;
-    private LocalDateTime paidAt;
+   public Bill() {
+   }
 
-    public Bill() {
-        this.taxRate = 10.0;
-    }
+   public int getBillId() {
+      return this.billId;
+   }
 
-    
-    public int    getBillId()          { return billId; }
-    public void   setBillId(int v)     { this.billId = v; }
+   public void setBillId(int v) {
+      this.billId = v;
+   }
 
-    public int    getReservationId()        { return reservationId; }
-    public void   setReservationId(int v)   { this.reservationId = v; }
+   public int getReservationId() {
+      return this.reservationId;
+   }
 
-    public Reservation getReservation()             { return reservation; }
-    public void        setReservation(Reservation v){ this.reservation = v; }
+   public void setReservationId(int v) {
+      this.reservationId = v;
+   }
 
-    public double getRoomCharge()           { return roomCharge; }
-    public void   setRoomCharge(double v)   { this.roomCharge = v; }
+   public Reservation getReservation() {
+      return this.reservation;
+   }
 
-    public double getTaxAmount()            { return taxAmount; }
-    public void   setTaxAmount(double v)    { this.taxAmount = v; }
+   public void setReservation(Reservation v) {
+      this.reservation = v;
+   }
 
-    public double getDiscount()             { return discount; }
-    public void   setDiscount(double v)     { this.discount = v; }
+   public double getRoomCharge() {
+      return this.roomCharge;
+   }
 
-    public double getTotalAmount()          { return totalAmount; }
-    public void   setTotalAmount(double v)  { this.totalAmount = v; }
+   public void setRoomCharge(double v) {
+      this.roomCharge = v;
+   }
 
-    public double getTaxRate()              { return taxRate; }
-    public void   setTaxRate(double v)      { this.taxRate = v; }
+   public double getTaxAmount() {
+      return this.taxAmount;
+   }
 
-    public boolean isPaid()                { return paid; }
-    public void    setPaid(boolean v)      { this.paid = v; }
+   public void setTaxAmount(double v) {
+      this.taxAmount = v;
+   }
 
-    public LocalDateTime getGeneratedAt()             { return generatedAt; }
-    public void          setGeneratedAt(LocalDateTime v){ this.generatedAt = v; }
+   public double getDiscount() {
+      return this.discount;
+   }
 
-    public LocalDateTime getPaidAt()             { return paidAt; }
-    public void          setPaidAt(LocalDateTime v){ this.paidAt = v; }
+   public void setDiscount(double v) {
+      this.discount = v;
+   }
 
-    /** Price before tax . */
-    public double getSubtotal() { return roomCharge - discount; }
+   public double getTotalAmount() {
+      return this.totalAmount;
+   }
 
-    @Override
-    public String toString() {
-        return "Bill{billId=" + billId + ", total=" + totalAmount + ", paid=" + paid + "}";
-    }
+   public void setTotalAmount(double v) {
+      this.totalAmount = v;
+   }
+
+   public double getTaxRate() {
+      return this.taxRate;
+   }
+
+   public void setTaxRate(double v) {
+      this.taxRate = v;
+   }
+
+   public boolean isPaid() {
+      return this.paid;
+   }
+
+   public void setPaid(boolean v) {
+      this.paid = v;
+   }
+
+   public LocalDateTime getGeneratedAt() {
+      return this.generatedAt;
+   }
+
+   public void setGeneratedAt(LocalDateTime v) {
+      this.generatedAt = v;
+   }
+
+   public LocalDateTime getPaidAt() {
+      return this.paidAt;
+   }
+
+   public void setPaidAt(LocalDateTime v) {
+      this.paidAt = v;
+   }
+
+   public double getSubtotal() {
+      return this.roomCharge - this.discount;
+   }
+
+   public String toString() {
+      return "Bill{billId=" + this.billId + ", total=" + this.totalAmount + ", paid=" + this.paid + "}";
+   }
 }

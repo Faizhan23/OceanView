@@ -3,10 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-/**
- * Model class representing a hotel reservation.
- * Holds all guest and booking information.
- */
+
 public class Reservation {
 
     // Room type constants
@@ -76,10 +73,7 @@ public class Reservation {
         return getNumberOfNights() * getNightlyRate();
     }
 
-    // ---------------------------------------------------------------
-    // Getters & Setters
-    // ---------------------------------------------------------------
-
+    
     public String getReservationNumber() {
         return reservationNumber;
     }
@@ -136,19 +130,13 @@ public class Reservation {
         this.checkOutDate = checkOutDate;
     }
 
-    /**
-     * Serialises the reservation to a pipe-delimited String for file storage.
-     * Format: resNum|guestName|address|contact|roomType|checkIn|checkOut
-     */
+    
     public String toFileString() {
         return reservationNumber + "|" + guestName + "|" + address + "|"
                 + contactNumber + "|" + roomType + "|"
                 + checkInDate.toString() + "|" + checkOutDate.toString();
     }
 
-    /**
-     * Deserialises a pipe-delimited line back into a Reservation object.
-     */
     public static Reservation fromFileString(String line) {
         String[] parts = line.split("\\|", -1);
         if (parts.length != 7)

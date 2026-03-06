@@ -1,63 +1,94 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.model;
 
-
 public class Room {
+   private int roomId;
+   private String roomNumber;
+   private int categoryId;
+   private RoomCategory category;
+   private int floorNumber;
+   private int capacity;
+   private boolean active;
 
-    private int          roomId;
-    private String       roomNumber;
-    private int          categoryId;
-    private RoomCategory category;       
-    private int          floorNumber;
-    private int          capacity;
-    private boolean      active;
+   public Room() {
+   }
 
-    public Room() { }
+   public Room(int roomId, String roomNumber, RoomCategory category, int floorNumber, int capacity, boolean active) {
+      this.roomId = roomId;
+      this.roomNumber = roomNumber;
+      this.category = category;
+      this.categoryId = category != null ? category.getCategoryId() : 0;
+      this.floorNumber = floorNumber;
+      this.capacity = capacity;
+      this.active = active;
+   }
 
-    public Room(int roomId, String roomNumber, RoomCategory category,
-                int floorNumber, int capacity, boolean active) {
-        this.roomId      = roomId;
-        this.roomNumber  = roomNumber;
-        this.category    = category;
-        this.categoryId  = category != null ? category.getCategoryId() : 0;
-        this.floorNumber = floorNumber;
-        this.capacity    = capacity;
-        this.active      = active;
-    }
+   public int getRoomId() {
+      return this.roomId;
+   }
 
-    public int          getRoomId()            { return roomId; }
-    public void         setRoomId(int v)       { this.roomId = v; }
+   public void setRoomId(int v) {
+      this.roomId = v;
+   }
 
-    public String       getRoomNumber()            { return roomNumber; }
-    public void         setRoomNumber(String v)    { this.roomNumber = v; }
+   public String getRoomNumber() {
+      return this.roomNumber;
+   }
 
-    public int          getCategoryId()        { return categoryId; }
-    public void         setCategoryId(int v)   { this.categoryId = v; }
+   public void setRoomNumber(String v) {
+      this.roomNumber = v;
+   }
 
-    public RoomCategory getCategory()              { return category; }
-    public void         setCategory(RoomCategory v){ this.category = v; }
+   public int getCategoryId() {
+      return this.categoryId;
+   }
 
-    public int          getFloorNumber()       { return floorNumber; }
-    public void         setFloorNumber(int v)  { this.floorNumber = v; }
+   public void setCategoryId(int v) {
+      this.categoryId = v;
+   }
 
-    public int          getCapacity()          { return capacity; }
-    public void         setCapacity(int v)     { this.capacity = v; }
+   public RoomCategory getCategory() {
+      return this.category;
+   }
 
-    public boolean      isActive()             { return active; }
-    public void         setActive(boolean v)   { this.active = v; }
+   public void setCategory(RoomCategory v) {
+      this.category = v;
+   }
 
-    
-    public double getPricePerNight() {
-        return category != null ? category.getPricePerNight() : 0.0;
-    }
+   public int getFloorNumber() {
+      return this.floorNumber;
+   }
 
-    
-    public String getCategoryName() {
-        return category != null ? category.getCategoryName() : "Unknown";
-    }
+   public void setFloorNumber(int v) {
+      this.floorNumber = v;
+   }
 
-    @Override
-    public String toString() {
-        return "Room{roomId=" + roomId + ", roomNumber='" + roomNumber +
-               "', category='" + getCategoryName() + "', floor=" + floorNumber + "}";
-    }
+   public int getCapacity() {
+      return this.capacity;
+   }
+
+   public void setCapacity(int v) {
+      this.capacity = v;
+   }
+
+   public boolean isActive() {
+      return this.active;
+   }
+
+   public void setActive(boolean v) {
+      this.active = v;
+   }
+
+   public double getPricePerNight() {
+      return this.category != null ? this.category.getPricePerNight() : (double)0.0F;
+   }
+
+   public String getCategoryName() {
+      return this.category != null ? this.category.getCategoryName() : "Unknown";
+   }
+
+   public String toString() {
+      int var10000 = this.roomId;
+      return "Room{roomId=" + var10000 + ", roomNumber='" + this.roomNumber + "', category='" + this.getCategoryName() + "', floor=" + this.floorNumber + "}";
+   }
 }

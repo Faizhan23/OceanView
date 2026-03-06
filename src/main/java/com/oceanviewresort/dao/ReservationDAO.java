@@ -1,3 +1,4 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
 package com.oceanviewresort.dao;
 
 import com.oceanviewresort.model.Reservation;
@@ -5,26 +6,24 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-
 public interface ReservationDAO {
+   int save(Reservation var1);
 
-    int  save(Reservation reservation);
+   Optional<Reservation> findById(int var1);
 
-    Optional<Reservation> findById(int reservationId);
+   Optional<Reservation> findByRef(String var1);
 
-    Optional<Reservation> findByRef(String reservationRef);
+   List<Reservation> findAll();
 
-    List<Reservation> findAll();
+   List<Reservation> findByGuestName(String var1);
 
-    List<Reservation> findByGuestName(String name);
+   boolean isRoomAvailable(int var1, LocalDate var2, LocalDate var3);
 
-    boolean isRoomAvailable(int roomId, LocalDate checkIn, LocalDate checkOut);
+   boolean isRoomAvailableExcluding(int var1, LocalDate var2, LocalDate var3, int var4);
 
-    boolean isRoomAvailableExcluding(int roomId, LocalDate checkIn, LocalDate checkOut, int excludeReservationId);
+   boolean update(Reservation var1);
 
-    boolean update(Reservation reservation);
+   boolean cancel(int var1);
 
-    boolean cancel(int reservationId);
-
-    int getNextSequence();
+   int getNextSequence();
 }
