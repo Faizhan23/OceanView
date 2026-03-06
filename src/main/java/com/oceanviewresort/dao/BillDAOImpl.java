@@ -44,7 +44,7 @@ public class BillDAOImpl implements BillDAO {
 
                   try {
                      var10000 = rs.next();
-                     if (var10000 == false) {
+                     if (!rs.next()) {
                         return Optional.empty();
                      }
 

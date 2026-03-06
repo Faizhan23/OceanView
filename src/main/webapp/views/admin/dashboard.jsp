@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="c" uri="javax.tags.core" %>
+<%@ taglib prefix="fmt" uri="javax.tags.fmt" %>
 <c:set var="pageTitle" value="Dashboard" />
 <%@ include file="/views/common/header.jsp" %>
 

@@ -10,7 +10,7 @@ public final class PasswordUtil {
    }
 
    public static String hashPassword(String plainPassword) {
-      return BCrypt.hashpw(plainPassword, BCrypt.gensalt(12));
+	   return BCrypt.hashpw(plainPassword, BCrypt.gensalt(BCRYPT_ROUNDS));
    }
 
    public static boolean verifyPassword(String plainPassword, String hashedPassword) {

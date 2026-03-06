@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class Reservation {
+public class Reservation$Status {
    private int reservationId;
    private String reservationRef;
    private int guestId;
@@ -21,7 +21,7 @@ public class Reservation {
    private LocalDateTime createdAt;
    private LocalDateTime updatedAt;
 
-   public Reservation() {
+   public void Reservation() {
       this.status = Reservation.Status.CONFIRMED;
    }
 
